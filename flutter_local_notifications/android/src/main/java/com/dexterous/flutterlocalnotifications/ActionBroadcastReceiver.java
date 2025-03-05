@@ -68,7 +68,17 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
     }
     actionEventSink.addItem(action);
 
+    if (engine != null) {
+      Log.e(TAG, "Engine is already initialised");
+      // Resume MainActivity if it exists
+      Intent activityIntent = new Intent(context, MainActivity.class); // Change to InCallActivity.class if needed
+      activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      context.startActivity(activityIntent);
+      return;
+    }
+
     startEngine(context);
+    
   }
 
   private void startEngine(Context context) {
@@ -76,6 +86,8 @@ public class ActionBroadcastReceiver extends BroadcastReceiver {
       Log.e(TAG, "Engine is already initialised");
       return;
     }
+
+    Log.e(TAG, "Engine is initialing");
 
     FlutterInjector injector = FlutterInjector.instance();
     FlutterLoader loader = injector.flutterLoader();
